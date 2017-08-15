@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charSet='utf-8' />
-  <title>ko-cola - SSR和SPA</title>
+  <title>ko-cola - Inject global全局注入</title>
   <link href='/doc/css/docs.css' rel='stylesheet'>
   <link href='/doc/css/github-markdown.css' rel='stylesheet'>
   <script>
@@ -37,7 +37,7 @@
             
               <li>
               
-                 <a href='/doc/ssr.html' class='active'>SSR和SPA</a>
+                 <a href='/doc/ssr.html'>SSR和SPA</a>
               
               </li>
             
@@ -112,7 +112,7 @@
             
               <li>
               
-                 <a href='/doc/tip3-inject-global.html'>Inject global全局注入</a>
+                 <a href='/doc/tip3-inject-global.html' class='active'>Inject global全局注入</a>
               
               </li>
             
@@ -206,31 +206,23 @@
   </div>
   <div class='page'>
     <div class='page-content'>
-      <h1>SSR和SPA</h1>
+      <h1>Inject global全局注入</h1>
       <div style="
           float: right;
           top: -60px;
           position: relative;
           margin-right: 10px;
-      "><a href="https://github.com/koa-cola/website/blob/master/source/ssr.md">修改</a></div>
-      <p>koa-cola是一个包括前后端全栈的框架，在服务器端，支持以react作为组件模板的方式直接渲染到浏览器端的SSR（Server Side Render）的架构，在浏览器端，支持react-router的bundle的SPA(Single Page Application）架构，SSR和SPA各有优缺点，SPA通过浏览器端router控制页面的跳转，交互体验更友好，但是对于搜索引擎不友好，所以支持SSR是无可避免的，对于开发者，开发koa-cola应用，不需要在写代码时候关心这段代码到底是SSR直渲还是SPA的异步，你只需要关心业务逻辑，koa-cola会帮助你解决代码在不同的环境运行。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">@asyncConnect([</div><div class="line">  &#123;</div><div class="line">    key: <span class="string">'some_data'</span>,</div><div class="line">    promise: <span class="keyword">async</span> (&#123; params, helpers&#125;) =&gt; &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">await</span> fetch(<span class="string">'/some/data/api'</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">])</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span>&lt;<span class="title">Props</span>, <span class="title">States</span>&gt; </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props: Props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> &lt;div&gt;</div><div class="line">        &#123;this.props.some_data&#125;</div><div class="line">    &lt;/div&gt;;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> Index;</div></pre></td></tr></table></figure>
-<p> 上面这段是koa-cola项目里面使用了asyncConnect的装饰器来初始化数据。</p>
-<ul>
-<li>当刷新页面，需要SSR方式直渲Index页面时，服务器端会通过fetch获取数据，然后再渲染出来html。</li>
-<li><p>当在其他页面点击了<link>的react组件时，浏览器端则会通过router找到这个组件，然后在浏览器端使用fetch方法异步获取数据，然后重新在浏览器端渲染页面，这就是SPA方式。</p>
-<p>fetch是一个前后端均可支持的“universal”库，在koa-cola，开发者不但可以前后端使用数据请求接口fetch，甚至可以前后端使用router和redux，和部分组件(在服务器端react组件只支持render之前的生命周期)。</p>
-</li>
-</ul>
+      "><a href="https://github.com/koa-cola/website/blob/master/source/tip3-inject-global.md">修改</a></div>
+      <p>全局依赖注入，有时候在其他非应用运行时引用koa-cola里面的文件时，会因为文件依赖<code>app.xxx</code>而出错，使用inject global方式，可以实现第三方非koa-cola的require。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; reqInject &#125; <span class="keyword">from</span> <span class="string">'koa-cola'</span></div><div class="line"><span class="keyword">var</span> user;</div><div class="line">reqInject(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    user = <span class="built_in">require</span>(<span class="string">'./api/models/user'</span>).default <span class="comment">// 直接require项目内的文件</span></div><div class="line">    <span class="keyword">var</span> config = app.config; <span class="comment">// 或者app当前配置</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 
     </div>
   </div>
   <div class='switch-page'>
     
-      <a class='previous' href='/doc/index.html'>Previous</a>
+      <a class='previous' href='/doc/tip2-redux.html'>Previous</a>
     
     
-      <a class='next' href='/doc/compare-next.html'>Next</a>
+      <a class='next' href='/doc/tip4-cluster.html'>Next</a>
     
   </div>
 </body>
