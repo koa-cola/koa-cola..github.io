@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charSet='utf-8' />
-  <title>ko-cola - Universal developing</title>
+  <title>ko-cola - Universal</title>
   <link href='/css/docs.css' rel='stylesheet'>
   <link href='/css/github-markdown.css' rel='stylesheet'>
   <script>
@@ -49,7 +49,7 @@
             
               <li>
               
-                 <a href='/universal.html' class='active'>Universal developing</a>
+                 <a href='/universal.html' class='active'>Universal</a>
               
               </li>
             
@@ -212,7 +212,7 @@
   </div>
   <div class='page'>
     <div class='page-content'>
-      <h1>Universal developing</h1>
+      <h1>Universal</h1>
       <div style="
           float: right;
           top: -60px;
@@ -222,8 +222,8 @@
       <!-- ### 前后端router -->
 ### front end and back end router
 <!-- 通过controller生成server端的react-router，并且也生成client端的react-redux的Provider(里面还是封装了react-router) -->
-koa-cola auto generate both front end and back ends router
-<p>in controller:</p>
+koa-cola auto generate both front end and back end router
+<p>controller:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Controller(<span class="string">''</span>) </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FooController</span> </span>&#123;</div><div class="line">    @Get(<span class="string">'/'</span>)</div><div class="line">    @View(<span class="string">'index'</span>)</div><div class="line">    index(@Ctx() ctx) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'&lt;h1&gt;hello koa-cola !&lt;/h1&gt;'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <!-- 自动生成的server端的react-router: -->
 react-router will be auto-generated like this:
